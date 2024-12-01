@@ -5,6 +5,10 @@ import kotlin.math.abs
  * https://adventofcode.com/2024/day/1
  */
 fun main() {
+  val EXPECTED_PART_1_RESULT = 1319616
+  val EXPECTED_PART_2_RESULT = 27267728
+  val EXPECTED_SAMPLE_PART_1_RESULT = 11
+  val EXPECTED_SAMPLE_PART_2_RESULT = 31
 
   fun part1(lines: List<String>): Int {
     val sortedLefts = lines.map(getOneFromPairInLine(PairSide.LEFT)).sorted()
@@ -34,23 +38,26 @@ fun main() {
   // Or read a large test input from the `src/Day01_test.txt.txt.txt` file:
   val testInput = readInput(fileName)
   val part1Result = part1(testInput)
-
-  val expectedPart1Result = 1319616
+  val expectedPart1Result =
+//    EXPECTED_SAMPLE_PART_1_RESULT
+    EXPECTED_PART_1_RESULT
   check(expectedPart1Result == part1Result)
 
   val part2Result = part2(testInput)
-  val expectedPart2Result = 27267728
+  val expectedPart2Result =
+//    EXPECTED_SAMPLE_PART_2_RESULT
+    EXPECTED_PART_2_RESULT
   check(expectedPart2Result == part2Result)
 
-  // Read the input from the `src/Day01.txt` file.
+  // Read the input from the `src/Day01_test.txt` or `src/Day01_sample.txt` file.
   part1Result.displayWith("Part 1")
   part2(testInput).displayWith("Part 2")
 }
 
-typealias Line = String
-typealias Count = Int
+private typealias Line = String
+private typealias Count = Int
 
-enum class PairSide {
+private enum class PairSide {
   LEFT, RIGHT
 }
 
