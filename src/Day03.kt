@@ -18,8 +18,9 @@ fun main() {
   }
 
   // Test if implementation meets criteria from the description (`src/Day03_sample.txt`), like:
-  val samplePart1Result = part1(readInput(SAMPLE_INPUT_FILE))
-  val samplePart2Result = part2(readInput(SAMPLE_INPUT_FILE))
+  val sampleInput = readInput(SAMPLE_INPUT_FILE)
+  val samplePart1Result = part1(sampleInput)
+  val samplePart2Result = part2(sampleInput)
   samplePart1Result.displayWith("Sample Part 1")
   samplePart2Result.displayWith("Sample Part 2")
   check(EXPECTED_SAMPLE_PART_1_RESULT == samplePart1Result)
