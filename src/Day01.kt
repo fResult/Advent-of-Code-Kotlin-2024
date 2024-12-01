@@ -1,8 +1,7 @@
 import kotlin.math.abs
 
 /**
- * Day 1: Historian Hysteria
- * https://adventofcode.com/2024/day/1
+ * [Day 1: Historian Hysteria](https://adventofcode.com/2024/day/1)
  */
 fun main() {
   val MAIN_INPUT_FILE = "Day01_test"
@@ -30,7 +29,7 @@ fun main() {
     return lefts.sumOf { it * rightToCountMap.getOrDefault(it, 0) }
   }
 
-  // Test if implementation meets criteria from the description, like:
+  // Test if implementation meets criteria from the description (`src/Day01_sample.txt`), like:
   val samplePart1Result = part1(readInput(SAMPLE_INPUT_FILE))
   val samplePart2Result = part2(readInput(SAMPLE_INPUT_FILE))
   samplePart1Result.displayWith("Sample Part 1")
@@ -39,7 +38,7 @@ fun main() {
   check(EXPECTED_SAMPLE_PART_2_RESULT == samplePart2Result)
 
 
-  // Or read a large test input from the `src/Day01_test.txt.txt.txt` file:
+  // Or read a large test input from the `src/Day01_test.txt` file:
   val testInput = readInput(MAIN_INPUT_FILE)
   val part1Result = part1(testInput)
   val part2Result = part2(testInput)
