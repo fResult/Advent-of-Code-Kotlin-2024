@@ -1,7 +1,8 @@
 import kotlin.math.abs
 
 /**
- * [Day 1: Historian Hysteria](https://adventofcode.com/2024/day/1)
+ * Day 1: Historian Hysteria
+ * https://adventofcode.com/2024/day/1
  */
 fun main() {
   val MAIN_INPUT_FILE = "Day01_test"
@@ -46,7 +47,6 @@ fun main() {
   part2Result.displayWith("Part 2")
   check(EXPECTED_PART_1_RESULT == part1Result)
   check(EXPECTED_PART_2_RESULT == part2Result)
-
 }
 
 // Related functions

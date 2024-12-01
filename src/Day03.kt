@@ -25,7 +25,6 @@ fun main() {
   check(EXPECTED_SAMPLE_PART_1_RESULT == samplePart1Result)
   check(EXPECTED_SAMPLE_PART_2_RESULT == samplePart2Result)
 
-
   // Or read a large test input from the `src/Day03_test.txt` file:
   val testInput = readInput(MAIN_INPUT_FILE)
   val part1Result = part1(testInput)
