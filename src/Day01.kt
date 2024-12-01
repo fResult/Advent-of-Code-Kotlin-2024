@@ -5,8 +5,11 @@ import kotlin.math.abs
  * https://adventofcode.com/2024/day/1
  */
 fun main() {
+  val MAIN_INPUT_FILE = "Day01_test"
   val EXPECTED_PART_1_RESULT = 1319616
   val EXPECTED_PART_2_RESULT = 27267728
+
+  val SAMPLE_INPUT_FILE = "Day01_sample"
   val EXPECTED_SAMPLE_PART_1_RESULT = 11
   val EXPECTED_SAMPLE_PART_2_RESULT = 31
 
@@ -28,32 +31,26 @@ fun main() {
   }
 
   // Test if implementation meets criteria from the description, like:
-  val sampleFile = "Day01_sample"
-  check(part1(readInput(sampleFile)) == 11)
+  val samplePart1Result = part1(readInput(SAMPLE_INPUT_FILE))
+  val samplePart2Result = part2(readInput(SAMPLE_INPUT_FILE))
+  samplePart1Result.displayWith("Sample Part 1")
+  samplePart2Result.displayWith("Sample Part 2")
+  check(EXPECTED_SAMPLE_PART_1_RESULT == samplePart1Result)
+  check(EXPECTED_SAMPLE_PART_2_RESULT == samplePart2Result)
 
-  val fileName =
-//    sampleFile
-    "Day01_test"
 
   // Or read a large test input from the `src/Day01_test.txt.txt.txt` file:
-  val testInput = readInput(fileName)
+  val testInput = readInput(MAIN_INPUT_FILE)
   val part1Result = part1(testInput)
-  val expectedPart1Result =
-//    EXPECTED_SAMPLE_PART_1_RESULT
-    EXPECTED_PART_1_RESULT
-  check(expectedPart1Result == part1Result)
-
   val part2Result = part2(testInput)
-  val expectedPart2Result =
-//    EXPECTED_SAMPLE_PART_2_RESULT
-    EXPECTED_PART_2_RESULT
-  check(expectedPart2Result == part2Result)
-
-  // Read the input from the `src/Day01_test.txt` or `src/Day01_sample.txt` file.
   part1Result.displayWith("Part 1")
-  part2(testInput).displayWith("Part 2")
+  part2Result.displayWith("Part 2")
+  check(EXPECTED_PART_1_RESULT == part1Result)
+  check(EXPECTED_PART_2_RESULT == part2Result)
+
 }
 
+// Related functions
 private typealias Line = String
 private typealias Count = Int
 
