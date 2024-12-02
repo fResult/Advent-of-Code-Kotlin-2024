@@ -30,10 +30,10 @@ fun main() {
   val testInput = readInput(MAIN_INPUT_FILE)
   val part1Result = part1(testInput)
   val part2Result = part2(testInput)
-  check(EXPECTED_PART_1_RESULT == part1Result)
-  check(EXPECTED_PART_2_RESULT == part2Result)
   part1Result.displayWith("Part 1")
   part2Result.displayWith("Part 2")
+  check(EXPECTED_PART_1_RESULT == part1Result)
+  check(EXPECTED_PART_2_RESULT == part2Result)
 }
 
 // Related functions goes here
