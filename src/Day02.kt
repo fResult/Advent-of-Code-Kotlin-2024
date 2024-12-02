@@ -39,6 +39,7 @@ fun main() {
 }
 
 private typealias Index = Int
+private typealias Level = Int
 private typealias Report = List<Int>
 
 private enum class ReportTrackingState {
@@ -69,13 +70,14 @@ private fun isSafeReportWithDampener(report: Report): Boolean {
   return false
 }
 
-private fun trackReportState(xs: Report): (Index, ReportTrackingState, Int) -> ReportTrackingState {
+private fun trackReportState(xs: Report): (Index, ReportTrackingState, Level) -> ReportTrackingState {
   return { idx, prevState, currentLevel ->
     if (idx == 0) ReportTrackingState.INITIAL
     else {
       val prevLevel = xs[idx - 1]
-      val currMoreThanPrev = listOf(1, 2, 3).contains(currentLevel - prevLevel)
-      val currLessThanPrev = listOf(1, 2, 3).contains(prevLevel - currentLevel)
+      val acceptanceDiffs = (1..3)
+      val currMoreThanPrev = acceptanceDiffs.contains(currentLevel - prevLevel)
+      val currLessThanPrev = acceptanceDiffs.contains(prevLevel - currentLevel)
 
       when (prevState) {
         ReportTrackingState.INCREASING -> {
