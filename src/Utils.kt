@@ -19,3 +19,6 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun Any?.displayWith(tagPrefix: String? = "Result"): Unit = println("$tagPrefix: $this")
+
+fun List<String>.mapToInt(): List<Int> = this.map { it.toInt() }
+fun String.words(): List<String> = this.split(" ")

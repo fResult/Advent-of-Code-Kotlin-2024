@@ -10,15 +10,8 @@ fun main() {
   val EXPECTED_SAMPLE_PART_2_RESULT = 1
 
   fun part1(lines: List<String>): Int {
-    val result = lines.map { line ->
-      {
-        val levels = line.split(" ").map { level -> level.toInt() }
-        val levelsUnderCriteria = underCriteria(levels)
-
-        levels.foldIndexed(ReportTrackingState.INITIAL, levelsUnderCriteria)
-      }
-    }
-    return result.map { it() }.count(::isSafeReport)
+    val reports = lines.map { it.words().mapToInt() }
+    return reports.count(::isSafeReport)
   }
 
   fun part2(input: List<String>): Int {
@@ -45,52 +38,49 @@ fun main() {
 }
 
 private typealias Index = Int
+private typealias Report = List<Int>
 
 private enum class ReportTrackingState {
   INITIAL, INCREASING, DECREASING, MARKED_UNSAFE
 }
 
-private fun isSafeReport(reportState: ReportTrackingState): Boolean =
+private fun isSafeState(reportState: ReportTrackingState): Boolean =
   listOf(ReportTrackingState.DECREASING, ReportTrackingState.INCREASING).contains(reportState)
 
-private fun isCurrMoreThanPrevFrom1To3(current: Int, previous: Int): Boolean =
-  listOf(1, 2, 3).contains(current - previous)
+private fun isSafeReport(report: Report): Boolean {
+  val trackState = trackReportState(report)
+  val trackedReportState = report.foldIndexed(ReportTrackingState.INITIAL, trackState)
 
-private fun isCurrLessThanPrevFrom1To3(current: Int, previous: Int): Boolean =
-  listOf(1, 2, 3).contains(previous - current)
+  return isSafeState(trackedReportState);
+}
 
-private fun underCriteria(xs: List<Int>): (Index, ReportTrackingState, Int) -> ReportTrackingState {
-  return { idx, prevState, x ->
-    if (idx > 0) {
+private fun trackReportState(xs: List<Int>): (Index, ReportTrackingState, Int) -> ReportTrackingState {
+  return { idx, prevState, currentLevel ->
+    if (idx == 0) ReportTrackingState.INITIAL
+    else {
+      val prevLevel = xs[idx - 1]
+      val currMoreThanPrev = listOf(1, 2, 3).contains(currentLevel - prevLevel)
+      val currLessThanPrev = listOf(1, 2, 3).contains(prevLevel - currentLevel)
+
       when (prevState) {
-        ReportTrackingState.INCREASING -> if (isCurrMoreThanPrevFrom1To3(
-            x,
-            xs[idx - 1]
-          )
-        ) ReportTrackingState.INCREASING else ReportTrackingState.MARKED_UNSAFE
+        ReportTrackingState.INCREASING -> {
+          if (currMoreThanPrev) ReportTrackingState.INCREASING
+          else ReportTrackingState.MARKED_UNSAFE
+        }
 
-        ReportTrackingState.DECREASING -> if (isCurrLessThanPrevFrom1To3(
-            x,
-            xs[idx - 1]
-          )
-        ) ReportTrackingState.DECREASING else ReportTrackingState.MARKED_UNSAFE
+        ReportTrackingState.DECREASING -> {
+          if (currLessThanPrev) ReportTrackingState.DECREASING
+          else ReportTrackingState.MARKED_UNSAFE
+        }
 
         ReportTrackingState.MARKED_UNSAFE -> ReportTrackingState.MARKED_UNSAFE
 
         ReportTrackingState.INITIAL -> {
-          if (isCurrMoreThanPrevFrom1To3(x, xs[idx - 1])) {
-            ReportTrackingState.INCREASING
-          } else if (isCurrLessThanPrevFrom1To3(x, xs[idx - 1])) {
-            ReportTrackingState.DECREASING
-          } else {
-            ReportTrackingState.MARKED_UNSAFE
-          }
+          if (currMoreThanPrev) ReportTrackingState.INCREASING
+          else if (currLessThanPrev) ReportTrackingState.DECREASING
+          else ReportTrackingState.MARKED_UNSAFE
         }
       }
-    } else
-      ReportTrackingState.INITIAL
+    }
   }
 }
-
-
-
