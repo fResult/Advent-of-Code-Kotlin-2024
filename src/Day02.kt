@@ -7,10 +7,10 @@ fun main() {
   val EXPECTED_PART_2_RESULT = 1
   val SAMPLE_INPUT_FILE = "Day02_sample"
   val EXPECTED_SAMPLE_PART_1_RESULT = 2
-  val EXPECTED_SAMPLE_PART_2_RESULT = 1
+  val EXPECTED_SAMPLE_PART_2_RESULT = 4
 
   fun part1(lines: List<String>): Int {
-    val reports = lines.map { it.words().mapToInt() }
+    val reports: List<Report> = lines.map { it.words().mapToInt() }
     return reports.count(::isSafeReport)
   }
 
@@ -54,7 +54,7 @@ private fun isSafeReport(report: Report): Boolean {
   return isSafeState(trackedReportState);
 }
 
-private fun trackReportState(xs: List<Int>): (Index, ReportTrackingState, Int) -> ReportTrackingState {
+private fun trackReportState(xs: Report): (Index, ReportTrackingState, Int) -> ReportTrackingState {
   return { idx, prevState, currentLevel ->
     if (idx == 0) ReportTrackingState.INITIAL
     else {
