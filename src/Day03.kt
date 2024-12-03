@@ -7,7 +7,7 @@ fun main() {
   val EXPECTED_PART_2_RESULT = 6
   val SAMPLE_INPUT_FILE = "Day03_sample"
   val EXPECTED_SAMPLE_PART_1_RESULT = 161
-  val EXPECTED_SAMPLE_PART_2_RESULT = 1
+  val EXPECTED_SAMPLE_PART_2_RESULT = 48
 
   val times: (Int, Int) -> Int = { x, y -> x * y }
   fun matchedResultToMultiplicationResult(matchResult: MatchResult): Int {
@@ -30,7 +30,10 @@ fun main() {
   }
 
   fun part2(lines: List<String>): Int {
-    return lines.size
+    val mulPattern = "(?<=do\\(\\).*)mul\\(\\d{1,3},\\d{1,3}\\)|(?<!don't\\(\\).*)mul\\(\\d{1,3},\\d{1,3}\\)".toRegex()
+    val sumAfterMatchPattern = matchPatternThenGetSums(mulPattern)
+
+    return lines.sumOf(sumAfterMatchPattern)
   }
 
   // Test if implementation meets criteria from the description (`src/Day03_sample.txt`), like:
@@ -40,14 +43,14 @@ fun main() {
   samplePart1Result.displayWith("Sample Part 1")
   samplePart2Result.displayWith("Sample Part 2")
   check(EXPECTED_SAMPLE_PART_1_RESULT == samplePart1Result)
-//  check(EXPECTED_SAMPLE_PART_2_RESULT == samplePart2Result)
+  check(EXPECTED_SAMPLE_PART_2_RESULT == samplePart2Result)
 
   // Or read a large test input from the `src/Day03_test.txt` file:
   val testInput = readInput(MAIN_INPUT_FILE)
   val part1Result = part1(testInput)
-//  val part2Result = part2(testInput)
+  val part2Result = part2(testInput)
   part1Result.displayWith("Part 1")
-//  part2Result.displayWith("Part 2")
+  part2Result.displayWith("Part 2")
   check(EXPECTED_PART_1_RESULT == part1Result)
 //  check(EXPECTED_PART_2_RESULT == part2Result)
 }
