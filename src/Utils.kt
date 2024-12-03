@@ -22,3 +22,6 @@ fun Any?.displayWith(tagPrefix: String? = "Result"): Unit = println("$tagPrefix:
 
 fun List<String>.mapToInts(): List<Int> = this.map { it.toInt() }
 fun String.words(): List<String> = this.split(" ")
+
+typealias Index = Int
+typealias Predicate<T> = (T) -> Boolean

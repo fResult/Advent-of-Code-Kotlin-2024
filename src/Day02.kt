@@ -38,10 +38,6 @@ fun main() {
   check(EXPECTED_PART_2_RESULT == part2Result)
 }
 
-private typealias Index = Int
-private typealias Level = Int
-private typealias Report = List<Level>
-
 private enum class ReportTrackingState {
   INITIAL, INCREASING, DECREASING, MARKED_UNSAFE
 }
@@ -70,7 +66,7 @@ private fun isSafeReportWithDampener(report: Report): Boolean {
   return false
 }
 
-private fun trackState(xs: List<Level>): (Index, ReportTrackingState, Level) -> ReportTrackingState {
+private fun trackState(xs: List<ReportLevel>): (Index, ReportTrackingState, ReportLevel) -> ReportTrackingState {
   return { idx, prevState, currentLevel ->
     if (idx == 0) ReportTrackingState.INITIAL
     else {
