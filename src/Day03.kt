@@ -16,11 +16,17 @@ fun main() {
     return matchResult.value.replace(patternToReplace, "").split(delimeter).mapToInts().fold(1, times)
   }
 
-  fun part1(lines: List<String>): Int {
-    return lines.sumOf { line ->
-      val targetPattern = "mul\\([0-9]{1,3},[0-9]{1,3}\\)".toRegex()
+  fun matchPatternThenGetSums(targetPattern: Regex): (String) -> Int {
+    return { line ->
       targetPattern.findAll(line).map(::matchedResultToMultiplicationResult).sum()
     }
+  }
+
+  fun part1(lines: List<String>): Int {
+    val mulPattern = "mul\\([0-9]{1,3},[0-9]{1,3}\\)".toRegex()
+    val sumAfterMatchPattern = matchPatternThenGetSums(mulPattern)
+
+    return lines.sumOf(sumAfterMatchPattern)
   }
 
   fun part2(lines: List<String>): Int {
