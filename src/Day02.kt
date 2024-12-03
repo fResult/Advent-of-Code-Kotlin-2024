@@ -10,12 +10,12 @@ fun main() {
   val EXPECTED_SAMPLE_PART_2_RESULT = 4
 
   fun part1(lines: List<String>): Int {
-    val reports: List<Report> = lines.map { it.words().mapToInt() }
+    val reports: List<Report> = lines.map { it.words().mapToInts() }
     return reports.count(::isSafeReport)
   }
 
   fun part2(lines: List<String>): Int {
-    val reports: List<Report> = lines.map { it.words().mapToInt() }
+    val reports: List<Report> = lines.map { it.words().mapToInts() }
     return reports.count(::isSafeReportWithDampener)
   }
 
@@ -40,7 +40,7 @@ fun main() {
 
 private typealias Index = Int
 private typealias Level = Int
-private typealias Report = List<Int>
+private typealias Report = List<Level>
 
 private enum class ReportTrackingState {
   INITIAL, INCREASING, DECREASING, MARKED_UNSAFE
@@ -50,8 +50,8 @@ private fun isSafeState(reportState: ReportTrackingState): Boolean =
   listOf(ReportTrackingState.DECREASING, ReportTrackingState.INCREASING).contains(reportState)
 
 private fun isSafeReport(report: Report): Boolean {
-  val trackState = trackReportState(report)
-  val trackedReportState = report.foldIndexed(ReportTrackingState.INITIAL, trackState)
+  val trackReportState = trackState(report)
+  val trackedReportState = report.foldIndexed(ReportTrackingState.INITIAL, trackReportState)
 
   return isSafeState(trackedReportState);
 }
@@ -59,18 +59,18 @@ private fun isSafeReport(report: Report): Boolean {
 private fun isSafeReportWithDampener(report: Report): Boolean {
   if (isSafeReport(report)) return true
 
-  val trackState = trackReportState(report)
+  val trackReportState = trackState(report)
 
   for (idx in report.indices) {
     val modifiedReport = report.toMutableList().apply { removeAt(idx) }
-    val modifiedFinalState = modifiedReport.foldIndexed(ReportTrackingState.INITIAL, trackState)
+    val modifiedFinalState = modifiedReport.foldIndexed(ReportTrackingState.INITIAL, trackReportState)
     if (isSafeState(modifiedFinalState)) return true
   }
 
   return false
 }
 
-private fun trackReportState(xs: Report): (Index, ReportTrackingState, Level) -> ReportTrackingState {
+private fun trackState(xs: List<Level>): (Index, ReportTrackingState, Level) -> ReportTrackingState {
   return { idx, prevState, currentLevel ->
     if (idx == 0) ReportTrackingState.INITIAL
     else {
