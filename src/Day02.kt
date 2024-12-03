@@ -67,13 +67,14 @@ private fun isSafeReportWithDampener(report: Report): Boolean {
 }
 
 private fun trackState(xs: List<ReportLevel>): (Index, ReportTrackingState, ReportLevel) -> ReportTrackingState {
+  val acceptanceLevelDiffs = 1..3
+
   return { idx, prevState, currentLevel ->
     if (idx == 0) ReportTrackingState.INITIAL
     else {
       val prevLevel = xs[idx - 1]
-      val acceptanceDiffs = (1..3)
-      val currMoreThanPrev = acceptanceDiffs.contains(currentLevel - prevLevel)
-      val currLessThanPrev = acceptanceDiffs.contains(prevLevel - currentLevel)
+      val currMoreThanPrev = acceptanceLevelDiffs.contains(currentLevel - prevLevel)
+      val currLessThanPrev = acceptanceLevelDiffs.contains(prevLevel - currentLevel)
 
       when (prevState) {
         ReportTrackingState.INCREASING -> {
