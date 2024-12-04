@@ -4,7 +4,7 @@
 fun main() {
   val MAIN_INPUT_FILE = "Day03_test"
   val EXPECTED_PART_1_RESULT = 173529487
-  val EXPECTED_PART_2_RESULT = 6
+  val EXPECTED_PART_2_RESULT = 99532691
   val SAMPLE_INPUT_FILE = "Day03_sample"
   val EXPECTED_SAMPLE_PART_1_RESULT = 161
   val EXPECTED_SAMPLE_PART_2_RESULT = 48
@@ -13,7 +13,11 @@ fun main() {
   fun matchedResultToMultiplicationResult(matchResult: MatchResult): Int {
     val patternToReplace = "[mul(|)]".toRegex()
     val delimeter = ","
-    return matchResult.value.replace(patternToReplace, "").split(delimeter).mapToInts().fold(1, times)
+    if (matchResult.value.isEmpty())
+      return 0
+    val test = matchResult.value.replace(patternToReplace, "")
+//    test.displayWith("test")
+    return test.split(delimeter).mapToInts().fold(1, times)
   }
 
   fun matchPatternThenGetSums(targetPattern: Regex): (String) -> Int {
@@ -29,11 +33,43 @@ fun main() {
     return lines.sumOf(sumAfterMatchPattern)
   }
 
+  /**
+   * This solution is from:
+   * [Youtube - Advent of Code 2024 in Kotlin. Day 3.](https://www.youtube.com/watch?v=ubz-Hm8Zci8)
+   */
   fun part2(lines: List<String>): Int {
-    val mulPattern = "(?<=do\\(\\).*)mul\\(\\d{1,3},\\d{1,3}\\)|(?<!don't\\(\\).*)mul\\(\\d{1,3},\\d{1,3}\\)".toRegex()
-    val sumAfterMatchPattern = matchPatternThenGetSums(mulPattern)
+//    val mulFunction = "mul\\(\\d{1,3},\\d{1,3}\\)".toRegex()
+//    val positiveLookMullBehindDo = "(?<=do\\(\\).*)$mulFunction".toRegex()
+//    val negativeLookMullBehindDont = "(?<!don't\\(\\).*)$mulFunction".toRegex()
+//    val mulPattern = "${positiveLookMullBehindDo}|${negativeLookMullBehindDont}".toRegex()
+//    val sumAfterMatchPattern = matchPatternThenGetSums(mulPattern)
+//
+//    return lines.sumOf(sumAfterMatchPattern)
+    val mulPattern = "mul\\(\\d{1,3},\\d{1,3}\\)|do(n't)?\\(\\)".toRegex()
+    val all = lines.flatMap { line ->
+      mulPattern.findAll(line).map { instruction(it.value) }
+    }
 
-    return lines.sumOf(sumAfterMatchPattern)
+    all.displayWith("All")
+
+    var enabled = true
+    var acc = 0
+
+    all.forEach { instruction ->
+      when (instruction) {
+        is Do -> enabled = true
+        is Dont -> enabled = false
+        is Mull  -> {
+          if (!enabled) println("Encounter disbled $instruction")
+          else {
+            val (x, y) = instruction
+            acc += x * y
+          }
+        }
+      }
+    }
+
+    return acc
   }
 
   // Test if implementation meets criteria from the description (`src/Day03_sample.txt`), like:
@@ -52,7 +88,24 @@ fun main() {
   part1Result.displayWith("Part 1")
   part2Result.displayWith("Part 2")
   check(EXPECTED_PART_1_RESULT == part1Result)
-//  check(EXPECTED_PART_2_RESULT == part2Result)
+  check(EXPECTED_PART_2_RESULT == part2Result)
 }
 
 // Related functions goes here
+private sealed interface Instruction
+private data object Do : Instruction
+private data object Dont : Instruction
+private data class Mull(val x: Int, val y: Int) : Instruction
+
+private fun instruction(str: String): Instruction {
+  return when {
+    str == "do()" -> Do
+    str == "don't()" -> Dont
+    str.startsWith("mul") -> {
+      val (x, y) = str.removeSurrounding("mul(", ")").split(",").mapToInts()
+      Mull(x, y)
+    }
+
+    else -> error("Unknown string: ${str}")
+  }
+}
